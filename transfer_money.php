@@ -1,6 +1,11 @@
 <?php
+
+session_start();
 include 'partials/_dbconnect.php';
+
 if (isset($_GET['id'])) {
+    include 'partials/_dbconnect.php';
+
     $moneyCircleId = $_GET['id'];
     // Prepare the SQL query to select the specified money circle
     $sql = "SELECT * FROM money_circle WHERE money_circle_id = $moneyCircleId";
@@ -14,7 +19,10 @@ if (isset($_GET['id'])) {
         $reservedMonths[] = $reservedRow['month'];
     }
 }
+
+
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -48,28 +56,28 @@ if (isset($_GET['id'])) {
                 <th>MONTH</th>
                 <th>OPERATION</th>
             </tr>
-            <?php 
+            <?php
             while ($row = mysqli_fetch_assoc($result)) {
                 $paymentPerMonth = $row['amount'] / 12;
                 echo '
                 <tr>
-                    <td>'.$row['money_circle_id'].'</td>
-                    <td>'.$row['amount'].'</td>
-                    <td>'.$paymentPerMonth.'</td>
+                    <td>' . $row['money_circle_id'] . '</td>
+                    <td>' . $row['amount'] . '</td>
+                    <td>' . $paymentPerMonth . '</td>
                     <td>
-                    <select name="month" id="month_'.$row['money_circle_id'].'">';
-                    $months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-                    foreach ($months as $month) {
-                        if (in_array($month, $reservedMonths)) {
-                            echo '<option value="'.$month.'" disabled>'.$month.' (Reserved)</option>';
-                        } else {
-                            echo '<option value="'.$month.'">'.$month.'</option>';
-                        }
+                    <select name="month" id="month_' . $row['money_circle_id'] . '">';
+                $months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+                foreach ($months as $month) {
+                    if (in_array($month, $reservedMonths)) {
+                        echo '<option value="' . $month . '" disabled>' . $month . ' (Reserved)</option>';
+                    } else {
+                        echo '<option value="' . $month . '">' . $month . '</option>';
                     }
-                    echo '
+                }
+                echo '
                     </select>
                 </td>
-                 <td id="join"; ><a href="transfer_money.php?id= '.$row['money_circle_id'].'"> <button type="button">join</button></a></td> 
+                 <td id="join"; ><a href="transfer_money.php?id= ' . $row['money_circle_id'] . '"> <button type="button">join</button></a></td> 
                 </tr>
                 ';
             }

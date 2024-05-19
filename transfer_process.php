@@ -1,6 +1,15 @@
 <?php
+session_start();
+include 'partials/_dbconnect.php';
+// Check if the user is an administrator
+if (!isset($_SESSION["UserType"]) || $_SESSION["UserType"] !== "admin") {
+    echo "You are not authorized to access this page.";
+    exit();
+}
 
+include "html/Admin Dashboard.html";
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
     include 'partials/_dbconnect.php';
 
     $from = $_GET['id'];
@@ -8,55 +17,53 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $credit = $_POST['credit'];
 
     $sql = "SELECT * from users where id=$from";
-    $query = mysqli_query($conn,$sql);
-    $sql1 = mysqli_fetch_array($query); 
+    $query = mysqli_query($conn, $sql);
+    $sql1 = mysqli_fetch_array($query);
 
     $sql = "SELECT * from users where id=$to";
-    $query = mysqli_query($conn,$sql);
+    $query = mysqli_query($conn, $sql);
     $sql2 = mysqli_fetch_array($query);
 
     // check input value is negative or not
-    if (($credit)<0) {
+    if (($credit) < 0) {
         echo '<script type="text/javascript">alert("Oops! Negative values cannot be Transferred") </script>';
     }
 
     // check insufficient amount.
-    else if($credit > $sql1['amount']) {
+    else if ($credit > $sql1['amount']) {
         echo '<script type="text/javascript">alert("Oops! Insufficient Amount") </script>';
     }
-    
-    // check zero values
-    else if($credit == 0) {
-        echo '<script type="text/javascript">alert("Oops! Zero value cannot be Transferred") </script>';
-    }
 
-    else {
-        
+    // check zero values
+    else if ($credit == 0) {
+        echo '<script type="text/javascript">alert("Oops! Zero value cannot be Transferred") </script>';
+    } else {
+
         // deducting credit from sender's account
         $newamount = $sql1['amount'] - $credit;
         $sql = "UPDATE users set amount=$newamount where id=$from";
-        mysqli_query($conn,$sql);
-        
+        mysqli_query($conn, $sql);
+
 
         // adding credit to reciever's account
         $newamount = $sql2['amount'] + $credit;
         $sql = "UPDATE users set amount=$newamount where id=$to";
-        mysqli_query($conn,$sql);
-        
+        mysqli_query($conn, $sql);
+
         $sender = $sql1['name'];
         $receiver = $sql2['name'];
         $sql = "INSERT INTO transaction(sender, receiver, amount) VALUES ('$sender','$receiver','$credit')";
-        $query=mysqli_query($conn,$sql);
+        $query = mysqli_query($conn, $sql);
 
         // window.location='index.php';
-        if($query){
-            echo "<script> alert('Transaction Successful'); window.location='index.php'; </script>"; 
+        if ($query) {
+            echo "<script> alert('Transaction Successful'); window.location='index.php'; </script>";
         }
 
-        $newamount= 0;
-        $credit =0;
-    }   
-    
+        $newamount = 0;
+        $credit = 0;
+    }
+
 }
 ?>
 <!doctype html>
@@ -88,15 +95,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     <!--  fatching selected user id details  -->
     <?php
-        include 'partials/_dbconnect.php';
-        $sid=$_GET['id'];
-        $sql = "SELECT * FROM  users where id=$sid";
-        $result=mysqli_query($conn,$sql);
-        if(!$result)
-        {
-            echo "Error : ".$sql."<br>".mysqli_error($conn);
-        }
-        $row=mysqli_fetch_assoc($result);
+    include 'partials/_dbconnect.php';
+    $sid = $_GET['id'];
+    $sql = "SELECT * FROM  users where id=$sid";
+    $result = mysqli_query($conn, $sql);
+    if (!$result) {
+        echo "Error : " . $sql . "<br>" . mysqli_error($conn);
+    }
+    $row = mysqli_fetch_assoc($result);
     ?>
 
     <div class="all_users">
@@ -107,13 +113,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <th>EMAIL</th>
                 <th>BALANCE</th>
             </tr>
-            <?php 
-                echo '
+            <?php
+            echo '
                 <tr>
-                    <td>'.$row['id'].'</td>
-                    <td>'.$row['name'].'</td>
-                    <td>'.$row['email'].'</td>
-                    <td>'.$row['amount'].'</td>
+                    <td>' . $row['id'] . '</td>
+                    <td>' . $row['name'] . '</td>
+                    <td>' . $row['email'] . '</td>
+                    <td>' . $row['amount'] . '</td>
                 </tr>
                 ';
             ?>
@@ -121,33 +127,31 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </div>
      <!--  fatching selected available money circles details  -->
     <?php
-        include 'partials/_dbconnect.php';
-        $mid=$_GET['money_circle_id'];
-        $sql = "SELECT * FROM  money_circle where id=$mid";
-        $result=mysqli_query($conn,$sql);
-        if(!$result)
-        {
-            echo "Error : ".$sql."<br>".mysqli_error($conn);
-        }
-        $row=mysqli_fetch_assoc($result);
+    include 'partials/_dbconnect.php';
+    $mid = $_GET['money_circle_id'];
+    $sql = "SELECT * FROM  money_circle where id=$mid";
+    $result = mysqli_query($conn, $sql);
+    if (!$result) {
+        echo "Error : " . $sql . "<br>" . mysqli_error($conn);
+    }
+    $row = mysqli_fetch_assoc($result);
     ?>
     <form class="transferprocess" method="POST">
         <select id="select" name="to" required>
             <option disabled selected>TRANSFER MONEY TO </option>
             <?php
-                $sql = "SELECT * FROM money_circle where id=$mid";
-                $result=mysqli_query($conn,$sql);
-                if(!$result)
-                {
-                    echo "Error : ".$sql."<br>".mysqli_error($conn);
-                }
-                while($row = mysqli_fetch_assoc($result)) {
+            $sql = "SELECT * FROM money_circle where id=$mid";
+            $result = mysqli_query($conn, $sql);
+            if (!$result) {
+                echo "Error : " . $sql . "<br>" . mysqli_error($conn);
+            }
+            while ($row = mysqli_fetch_assoc($result)) {
 
-                   $paymentPerMonth = $row['amount'] / 12;
-    
-         // Display each option with the money circle ID and the amount per month
-        echo '<option value="'.$row["money_circle_id"].'">'.' (CURRENT BALANCE : '.$paymentPerMonth.' )</option>';
-                }
+                $paymentPerMonth = $row['amount'] / 12;
+
+                // Display each option with the money circle ID and the amount per month
+                echo '<option value="' . $row["money_circle_id"] . '">' . ' (CURRENT BALANCE : ' . $paymentPerMonth . ' )</option>';
+            }
             ?>
         </select>
         <input type="number" name="credit" placeholder="AMOUNT" required>
