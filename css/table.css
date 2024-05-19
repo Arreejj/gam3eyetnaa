@@ -1,0 +1,86 @@
+/************* table style *********/
+h1 {
+    color: white;
+    text-align: center;
+    margin-bottom: 30px;
+}
+.all_users select{
+    width: 100%;
+    color: white;
+    text-align: center;
+    overflow: auto;
+}
+table {
+    width: 800px;
+    border-collapse: collapse;
+    margin: 0px auto;
+    border: 1px solid white;
+}
+table tr th , table tr td{
+    padding: 10px;
+}
+table tr #transfer {
+    padding: 3px;
+}
+table tr #join {
+    padding: 3px;
+}
+table tr td select  a button {
+    color: white;
+    padding: 7px 15px;
+    background-color: transparent;
+    border: 2px solid white;
+    background: linear-gradient(to right , transparent 50% , rgb(3, 180, 3) 50%);
+    background-size: 200%;
+    background-position: left;
+    transition: .3s;
+    cursor: pointer;
+    letter-spacing: 1px;
+}
+table tr td a select button:hover {
+    background-position: right;
+}
+tr:nth-child(even) {
+    background-color: rgba(0, 0, 0, 0.4);
+}
+tr:nth-child(odd) {
+    background-color: rgba(0, 0, 0, 0.2);
+}
+/* Style for the select element */
+select {
+    background-color: transparent; /* Transparent background */
+    border: 2px solid white; /* White border */
+    color: white; /* White text color */
+    padding: 10px; /* Padding for spacing */
+    border-radius: 5px; /* Rounded corners */
+    font-size: 16px; /* Font size */
+    appearance: none; /* Remove default arrow */
+    -webkit-appearance: none; /* Remove default arrow for Safari */
+    -moz-appearance: none; /* Remove default arrow for Firefox */
+    outline: none; /* Remove outline */
+    width: 100%; /* Full width */
+    box-sizing: border-box; /* Include padding in width */
+}
+
+/* Style for the select element container */
+.select-container {
+    position: relative; /* Relative positioning for the arrow */
+    width: 200px; /* Adjust the width as needed */
+}
+
+/* Custom arrow */
+.select-container::after {
+    content: '\25BC'; /* Unicode for down arrow */
+    position: absolute; /* Absolute positioning */
+    top: 50%; /* Center vertically */
+    right: 10px; /* Position from the right */
+    transform: translateY(-50%); /* Center vertically */
+    color: white; /* White color for the arrow */
+    pointer-events: none; /* Allow clicks through the arrow */
+}
+
+/* Style for the options */
+select option {
+    background-color: black; /* Background color for options */
+    color: white; /* Text color for options */
+}
