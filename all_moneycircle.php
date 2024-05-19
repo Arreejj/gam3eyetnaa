@@ -1,7 +1,18 @@
 <?php
 
 include 'partials/_dbconnect.php';
-$sql = "SELECT * FROM `money_circle`";
+
+// Initialize an empty variable for the search term
+$searchTerm = '';
+
+// Check if a search term is submitted
+if (isset($_POST['search'])) {
+    $searchTerm = mysqli_real_escape_string($conn, $_POST['search']);
+    $sql = "SELECT * FROM `money_circle` WHERE `amount` = '$searchTerm'";
+} else {
+    $sql = "SELECT * FROM `money_circle`";
+}
+
 $result = mysqli_query($conn, $sql);
 
 ?>
@@ -22,6 +33,36 @@ $result = mysqli_query($conn, $sql);
     <link rel="stylesheet" href="css/index.css">
     <link rel="stylesheet" href="css/table.css">
     <title>ALL AVAILABLE MONEY CIRCLES</title>
+
+    <style>
+        .search-form {
+            display: flex;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        .search-form input[type="text"] {
+            padding: 10px;
+            width: 300px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .search-form button {
+            padding: 10px 20px;
+            border: none;
+            background-color: grey;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+
+        .search-form button:hover {
+            background-color: black;
+        }
+    </style>
 </head>
 
 <body>
@@ -29,7 +70,16 @@ $result = mysqli_query($conn, $sql);
 
     <div class="cover"></div>
     
-    <h1>ALL &nbsp; Available Money circles</h1>
+    <h1>ALL &nbsp; Available Money Circles</h1>
+
+    <!-- Search Form -->
+    <div class="search-form">
+        <form method="POST" action="">
+            <input type="text" name="search" placeholder="Search by amount" value="<?php echo htmlspecialchars($searchTerm); ?>">
+            <button type="submit">Search</button>
+        </form>
+    </div>
+
     <div class="all_users" style="height: 500px;">
         <table>
             <tr>
@@ -43,11 +93,10 @@ $result = mysqli_query($conn, $sql);
                 $paymentPerMonth = $row['amount'] / 12;
                 echo '
                 <tr>
-                <td>
-                ' . $row['money_circle_id'] . '</td>
+                    <td>' . $row['money_circle_id'] . '</td>
                     <td>' . $row['amount'] . '</td>
                     <td>' . $paymentPerMonth . '</td>
-                    <td id="join"; ><a href="transfer_money.php?id= ' . $row['money_circle_id'] . '"> <button type="button">join</button></a></td> 
+                    <td id="join"><a href="transfer_money.php?id=' . $row['money_circle_id'] . '"><button type="button">Join</button></a></td>
                 </tr>
                 ';
             }
