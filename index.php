@@ -1,3 +1,22 @@
+<?php include 'partials/_footer.php';
+session_start();
+
+
+$firstName = '';
+
+if (!empty($_SESSION['ID'])) {
+    $email = $_SESSION['Email'];
+
+    // Retrieve the user's first name from the database
+    $sql = "SELECT firstname FROM users WHERE email = '$email'";
+    $result = mysqli_query($conn, $sql);
+
+    if (mysqli_num_rows($result) > 0) {
+        $row = mysqli_fetch_assoc($result);
+        $firstName = $row['firstname'];
+    }
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,6 +31,7 @@
     <link rel="stylesheet" href="css/navbar.css">
     <link rel="stylesheet" href="css/index.css">
     <link rel="stylesheet" href="css/footer.css">
+    
     <title>Gam3eyetna</title>
 </head>
 
@@ -28,15 +48,15 @@
         </div>
 
         <div class="allbtns">
-            <a href="all_user.php"><button type="button"><i class="fas fa-users"></i> ALL USERS &nbsp;&nbsp;&nbsp; </button></a>
-            <a href="create_user.php"><button type="button"><i class="fas fa-user"></i> CREATE USER &nbsp;&nbsp;&nbsp; </button></a>
+            <a href="signup.php"><button type="button"><i class="fas fa-users"></i>Registeration &nbsp;&nbsp;&nbsp; </button></a>
+            <a href="create_user.php"><button type="button"><i class="fas fa-user"></i> Amount of money you want to join &nbsp;&nbsp;&nbsp; </button></a>
             <a href="transfer_money.php"><button type="button"><i class="fas fa-hand-holding-usd"></i> TRANSFER MONEY &nbsp;&nbsp;&nbsp; </button></a>
-            <a href="transfer_log.php"><button type="button"><i class="fas fa-history"></i> TRANSACTION LOG &nbsp;&nbsp;&nbsp; </button></a>
+            <a href="all_moneycircle.php"><button type="button"><i class="fas fa-history"></i> Available Money Circles &nbsp;&nbsp;&nbsp; </button></a>
         </div>
         
     </div>
 
-    <?php include 'partials/_footer.php'; ?>
+   
     <!-- scripts  -->
     <script src="js/navscroll.js"></script>
 </body>

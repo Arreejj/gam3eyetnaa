@@ -1,4 +1,11 @@
 <?php
+session_start();
+include 'partials/_dbconnect.php';
+// Check if the user is an administrator
+if (!isset($_SESSION["UserType"]) || $_SESSION["UserType"] !== "admin") {
+    echo "You are not authorized to access this page.";
+    exit();
+}
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
@@ -14,13 +21,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo "<script> alert('Amount per participant should be 500 or more.'); </script>";
     } else {
         // Inserting contribution data for each participant
-        
-            $sql = "INSERT INTO `money_circle` ( `amount`) VALUES ( '$amount');";
-            $result = mysqli_query($conn, $sql);
-        
+
+        $sql = "INSERT INTO money_circle ( amount) VALUES ( '$amount');";
+        $result = mysqli_query($conn, $sql);
+
 
         if ($result) {
-            echo "<script> alert('Congrats!! You have successfully contributed to the money circle.'); </script>"; 
+            echo "<script> alert('Congrats!! You have successfully contributed to the money circle.'); </script>";
         }
     }
 
@@ -47,7 +54,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </head>
 
 <body>
-    <?php include 'partials/_navbar.php'; ?>
 
     <div class="cover"></div>
 

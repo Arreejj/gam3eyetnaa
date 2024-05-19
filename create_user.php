@@ -9,25 +9,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $amount = $_POST['amount'];
 
     // Check wether this user email exists 
-    $existSql = "SELECT * FROM `users` WHERE email = '$email'";
-    $result = mysqli_query($conn , $existSql);
+    $existSql = "SELECT * FROM users WHERE email = '$email'";
+    $result = mysqli_query($conn, $existSql);
     $numExistRow = mysqli_num_rows($result);
 
     if ($numExistRow > 0) {
         // if user already exist
-        echo "<script> alert('Email Already Exist !! Please use another Email'); </script>"; 
-    }
-    elseif ($amount < 500) {
+        echo "<script> alert('Email Already Exist !! Please use another Email'); </script>";
+    } elseif ($amount < 500) {
         // if amount is less than 500
         echo "<script> alert('Amount should be 500 or more.'); </script>";
-    }
-    else {
+    } else {
         // Inserting new user data
-        $sql = "INSERT INTO `users` (`name`, `email`, `amount`) VALUES ('$name', '$email', '$amount');";
-        $result = mysqli_query($conn,$sql);
-    
+        $sql = "INSERT INTO users (name, email, amount) VALUES ('$name', '$email', '$amount');";
+
+        $result = mysqli_query($conn, $sql);
+
         if ($result) {
-            echo "<script> alert('Congrats!! New User added'); </script>"; 
+            echo "<script> alert('Congrats!! New User added'); </script>";
         }
     }
 
@@ -59,11 +58,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <div class="cover"></div>
 
     <div class="create">
-        <h1>CREATE &nbsp; ACCOUNT</h1>
+        <h1>Chosen Circle &nbsp; </h1>
         <div class="createUser">
-            <div class="userimg">
-                <img src="images/undraw_male_avatar_323b.svg" alt="user image">
-            </div>
+            
             <div class="userdata">
                 <!-- Create user Form -->
                 <form method="POST">
