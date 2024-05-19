@@ -9,7 +9,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $amount = $_POST['amount'];
 
     // Check wether this user email exists 
-    $existSql = "SELECT * FROM users WHERE email = '$email'";
+    $existSql = "SELECT * FROM `users` WHERE email = '$email'";
     $result = mysqli_query($conn, $existSql);
     $numExistRow = mysqli_num_rows($result);
 
@@ -21,7 +21,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo "<script> alert('Amount should be 500 or more.'); </script>";
     } else {
         // Inserting new user data
-        $sql = "INSERT INTO users (name, email, amount) VALUES ('$name', '$email', '$amount');";
+        $sql = "INSERT INTO `users` (`name`, `email`, `amount`) VALUES ('$name', '$email', '$amount');";
 
         $result = mysqli_query($conn, $sql);
 

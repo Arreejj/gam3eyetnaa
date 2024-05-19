@@ -22,7 +22,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } else {
         // Inserting contribution data for each participant
 
-        $sql = "INSERT INTO money_circle ( amount) VALUES ( '$amount');";
+        $sql = "INSERT INTO `money_circle` ( `amount`) VALUES ( '$amount');";
         $result = mysqli_query($conn, $sql);
 
 
