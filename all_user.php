@@ -2,7 +2,7 @@
 
 include 'partials/_dbconnect.php';
 $sql = "SELECT * FROM `users`";
-$result = mysqli_query($conn,$sql);
+$result = mysqli_query($conn, $sql);
 
 ?>
 
@@ -25,7 +25,6 @@ $result = mysqli_query($conn,$sql);
 </head>
 
 <body>
-    <?php include 'partials/_navbar.php'; ?>
 
     <div class="cover"></div>
     
@@ -38,14 +37,14 @@ $result = mysqli_query($conn,$sql);
                 <th>EMAIL</th>
                 <th>BALANCE</th>
             </tr>
-            <?php 
+            <?php
             while ($row = mysqli_fetch_assoc($result)) {
                 echo "
                 <tr>
-                    <td>".$row['id']."</td>
-                    <td>".$row['name']."</td>
-                    <td>".$row['email']."</td>
-                    <td>".$row['amount']."</td>
+                    <td>" . $row['id'] . "</td>
+                    <td>" . $row['name'] . "</td>
+                    <td>" . $row['email'] . "</td>
+                    <td>" . $row['amount'] . "</td>
                 </tr>
                 ";
             }
