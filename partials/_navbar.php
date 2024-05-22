@@ -14,10 +14,11 @@
             <li><a id="home" href="index.php">Home</a></li>
              <!-- <li><a id="home" href="all_user.php">All Users</a></li> -->
             <li><a id="home" href="all_moneycircle.php">All available money circles</a></li>
+            <li><a id="home" href="createcircleuser.php">create money circles</a></li>
             <!-- <li><a id="home" href="create_user.php">Create Account</a></li> -->
             <li><a id="home" href="Account.php"> Login</a></li>
             <li><a id="home" href="signup.php">Registeration</a></li>
-            <li><a id="home" href="Edit.php">Edit password</a></li>
+
             <!-- <li><a id="home" href="create_circle.php">Create gam3eya</a></li> -->
             
             <!-- <li><a id="home" href="transfer_log.php">Transaction Log</a></li> -->
