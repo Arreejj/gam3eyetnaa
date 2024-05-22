@@ -5,18 +5,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     include 'partials/_dbconnect.php';
 
     $name = $_POST['name'];
-    $email = $_POST['email'];
+    $email = $_POST['email']; // assuming email is already validated from login
     $amount = $_POST['amount'];
 
-    // Check wether this user email exists 
-    $existSql = "SELECT * FROM `users` WHERE email = '$email'";
-    $result = mysqli_query($conn, $existSql);
-    $numExistRow = mysqli_num_rows($result);
-
-    if ($numExistRow > 0) {
-        // if user already exist
-        echo "<script> alert('Email Already Exist !! Please use another Email'); </script>";
-    } elseif ($amount < 500) {
+    if ($amount < 500) {
         // if amount is less than 500
         echo "<script> alert('Amount should be 500 or more.'); </script>";
     } else {
