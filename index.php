@@ -52,6 +52,7 @@ if (!empty($_SESSION['ID'])) {
             <a href="create_user.php"><button type="button"><i class="fas fa-user"></i> Amount of money you want to join &nbsp;&nbsp;&nbsp; </button></a>
             <a href="transfer_money.php"><button type="button"><i class="fas fa-hand-holding-usd"></i> TRANSFER MONEY &nbsp;&nbsp;&nbsp; </button></a>
             <a href="all_moneycircle.php"><button type="button"><i class="fas fa-history"></i> Available Money Circles &nbsp;&nbsp;&nbsp; </button></a>
+            <a href="createcircleuser.php"><button type="button"><i class="fas fa-history"></i> create Money Circles &nbsp;&nbsp;&nbsp; </button></a>
         </div>
         
     </div>
