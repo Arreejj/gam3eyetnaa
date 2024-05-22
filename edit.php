@@ -4,11 +4,18 @@ include 'partials/_dbconnect.php';
 
 $errors = []; // Initialize an array to store error messages
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["ChangePassword"])) {
     $Email = htmlspecialchars($_POST["Email"]);
-    $Password = htmlspecialchars($_POST["Password"]);
+    $OldPassword = htmlspecialchars($_POST["OldPassword"]);
+    $NewPassword = htmlspecialchars($_POST["NewPassword"]);
+    $ConfirmPassword = htmlspecialchars($_POST["ConfirmPassword"]);
 
-    // Use prepared statements to prevent SQL injection
+    // Validate the form inputs
+    if ($NewPassword !== $ConfirmPassword) {
+        $errors[] = "New passwords do not match.";
+    }
+
+    // Check if the email and old password match
     $sql = "SELECT * FROM usersignup WHERE Email = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("s", $Email);
@@ -19,35 +26,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $row = $result->fetch_assoc();
         $hashedPassword = $row['Password'];
 
-        // Verify if the entered password matches the hashed password
-        if (password_verify($Password, $hashedPassword)) {
-            $_SESSION["ID"] = $row["ID"];
-            $_SESSION["FName"] = $row["FirstName"];
-            $_SESSION["LName"] = $row["LastName"];
-            $_SESSION["Email"] = $row["Email"];
-            $_SESSION["UserType"] = $row["UserType"];
+        if (password_verify($OldPassword, $hashedPassword)) {
+            // Valid old password, update the password
+            $hashedNewPassword = password_hash($NewPassword, PASSWORD_DEFAULT);
+            $updateSql = "UPDATE usersignup SET Password = ? WHERE Email = ?";
+            $updateStmt = $conn->prepare($updateSql);
+            $updateStmt->bind_param("ss", $hashedNewPassword, $Email);
+            $updateStmt->execute();
 
-            if ($_SESSION["UserType"] == "admin") {
-                header("Location: admindashboard.php");
-                exit();
-            } else {
-                header("Location: contact.php");
-                exit();
-            }
+            // Redirect or show success message
+            $errors[] = "Password updated successfully.";
         } else {
-            $errors[] = "Invalid password.";
+            $errors[] = "Invalid old password.";
         }
     } else {
-        $errors[] = "Email does not exist.";
+        $errors[] = "Email not found.";
     }
 
     $stmt->close();
-}
-
-$currentPage = basename($_SERVER["SCRIPT_NAME"]);
-
-if (($currentPage === "admin_addproduct.php" || $currentPage === "admindashboard.php") && (!isset($_SESSION["UserType"]) || $_SESSION["UserType"] !== "admin")) {
-    $errors[] = "You are not authorized to access this page.";
 }
 ?>
 <!DOCTYPE html>
@@ -59,7 +55,7 @@ if (($currentPage === "admin_addproduct.php" || $currentPage === "admindashboard
     <link rel="stylesheet" href="css/navbar.css">
     <link rel="stylesheet" href="css/footer.css">
     <link rel="stylesheet" href="css/index.css">
-    <title>Login USER</title>
+    <title>Change Password</title>
 </head>
 <body>
 <?php include 'partials/_navbar.php'; ?>
@@ -67,17 +63,19 @@ if (($currentPage === "admin_addproduct.php" || $currentPage === "admindashboard
 <div class="cover"></div>
 
 <div class="create">
-    <h1>Login &nbsp; </h1>
+    <h1>Change Password</h1>
     <div class="createUser">
         <div class="userdata">
-            <!-- Create user Form -->
+            <!-- Change Password Form -->
             <form action="" method="post">
-                <h2>Login</h2>
+                <h2>Change Password</h2>
                 <div>
                     <input type="email" name="Email" placeholder="Email" required>
-                    <input type="password" name="Password" placeholder="Password" required>
+                    <input type="password" name="OldPassword" placeholder="Old Password" required>
+                    <input type="password" name="NewPassword" placeholder="New Password" required>
+                    <input type="password" name="ConfirmPassword" placeholder="Confirm New Password" required>
                 </div>
-                <input type="submit" name="Submit" value="Submit">
+                <input type="submit" name="ChangePassword" value="Change Password">
             </form>
         </div>
     </div>
