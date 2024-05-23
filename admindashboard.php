@@ -50,8 +50,9 @@ if (!empty($_SESSION['ID'])) {
             <a href="all_user.php"><button type="button"><i class="fas fa-users"></i>View Contributed Users &nbsp;&nbsp;&nbsp; </button></a>
             <a href="index.php"><button type="button"><i class="fas fa-users"></i>Home &nbsp;&nbsp;&nbsp; </button></a>
             <a href="signout.php"><button type="button"><i class="fas fa-users"></i>Logout &nbsp;&nbsp;&nbsp; </button></a>
-            <a href="Edit.php"><button type="button"><i class="fas fa-users"></i>Edit password &nbsp;&nbsp;&nbsp; </button></a>
+
             <a href="transferlog.php"><button type="button"><i class="fas fa-user"></i> Transfer Log &nbsp;&nbsp;&nbsp; </button></a>
+            <a href="admin_approval.php"><button type="button"><i class="fas fa-hand-holding-usd"></i> pending circles &nbsp;&nbsp;&nbsp; </button></a>
             <a href="create_circle.php"><button type="button"><i class="fas fa-hand-holding-usd"></i> Create Circle &nbsp;&nbsp;&nbsp; </button></a>
             <!-- <a href="all_moneycircle.php"><button type="button"><i class="fas fa-history"></i> Available Money Circles &nbsp;&nbsp;&nbsp; </button></a> -->
         </div>

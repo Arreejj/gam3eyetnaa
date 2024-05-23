@@ -22,7 +22,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo "<script> alert('Amount per participant should be 500 or more.'); </script>";
     } else {
         // Inserting contribution data into pending_contributions table
-        $sql = "INSERT INTO pending_contributions (user_id, amount, status) VALUES ('$user_id', '$amount', 'pending');";
+        $sql = "INSERT INTO `pending_contributions` (`user_id`, `amount`, `status`) VALUES ('$user_id', '$amount', 'pending');";
         $result = mysqli_query($conn, $sql);
 
         if ($result) {

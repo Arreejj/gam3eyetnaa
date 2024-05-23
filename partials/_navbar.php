@@ -18,6 +18,7 @@
             <!-- <li><a id="home" href="create_user.php">Create Account</a></li> -->
             <li><a id="home" href="Account.php"> Login</a></li>
             <li><a id="home" href="signup.php">Registeration</a></li>
+            <li><a id="home" href="viewallcirclesuser.php">view all circles you joined</a></li>
 
             <!-- <li><a id="home" href="create_circle.php">Create gam3eya</a></li> -->
             

@@ -2,26 +2,21 @@
 session_start();
 include 'partials/_dbconnect.php';
 
-$errors = []; // Initialize an array to store error messages
+$errors = [];
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $Email = htmlspecialchars($_POST["Email"]);
-    $Password = htmlspecialchars($_POST["Password"]);
+    $Email = $_POST["Email"];
+    $Password = $_POST["Password"];
 
-    // Use prepared statements to prevent SQL injection
-    $sql = "SELECT * FROM usersignup WHERE Email = ?";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("s", $Email);
-    $stmt->execute();
-    $result = $stmt->get_result();
+    $sql = "SELECT * FROM usersignup WHERE Email='$Email'";
+    $result = mysqli_query($conn, $sql);
 
-    if ($result && $result->num_rows > 0) {
-        $row = $result->fetch_assoc();
+    if (mysqli_num_rows($result) > 0) {
+        $row = mysqli_fetch_assoc($result);
         $hashedPassword = $row['Password'];
 
-        // Verify if the entered password matches the hashed password
         if (password_verify($Password, $hashedPassword)) {
-            $_SESSION["ID"] = $row["ID"];
+            $_SESSION["user_id"] = $row["id"];
             $_SESSION["FName"] = $row["FirstName"];
             $_SESSION["LName"] = $row["LastName"];
             $_SESSION["Email"] = $row["Email"];
@@ -31,7 +26,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 header("Location: admindashboard.php");
                 exit();
             } else {
-                header("Location: contact.php");
+                header("Location: createcircleuser.php");
                 exit();
             }
         } else {
@@ -40,15 +35,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } else {
         $errors[] = "Email does not exist.";
     }
-
-    $stmt->close();
 }
 
-$currentPage = basename($_SERVER["SCRIPT_NAME"]);
-
-if (($currentPage === "admin_addproduct.php" || $currentPage === "admindashboard.php") && (!isset($_SESSION["UserType"]) || $_SESSION["UserType"] !== "admin")) {
-    $errors[] = "You are not authorized to access this page.";
+if (!empty($errors)) {
+    echo '<div class="error-container">';
+    echo '<ul class="error-list">';
+    foreach ($errors as $error) {
+        echo "<li>$error</li>";
+    }
+    echo '</ul>';
+    echo '</div>';
 }
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -56,6 +54,9 @@ if (($currentPage === "admin_addproduct.php" || $currentPage === "admindashboard
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.3/css/all.css" integrity="sha384-SZXxX4whJ79/gErwcOYf+zWLeJdY/qpuqC4cAa9rOGUstPomtqpuNWT9wdPEn2fk" crossorigin="anonymous">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/navbar.css">
     <link rel="stylesheet" href="css/footer.css">
     <link rel="stylesheet" href="css/index.css">
@@ -67,34 +68,20 @@ if (($currentPage === "admin_addproduct.php" || $currentPage === "admindashboard
 <div class="cover"></div>
 
 <div class="create">
-    <h1>Login &nbsp; </h1>
+    <h1>Login</h1>
     <div class="createUser">
         <div class="userdata">
-            <!-- Create user Form -->
             <form action="" method="post">
                 <h2>Login</h2>
                 <div>
-                    <input type="email" name="Email" placeholder="Email" required>
-                    <input type="password" name="Password" placeholder="Password" required>
+                    <input type="text" name="Email" placeholder="Email" required="">
+                    <input type="password" name="Password" placeholder="Password" required="">
                 </div>
                 <input type="submit" name="Submit" value="Submit">
             </form>
         </div>
     </div>
 </div>
-
-<?php
-if (!empty($errors)) {
-    echo '<div class="error-container">';
-    echo '<ul class="error-list">';
-    foreach ($errors as $error) {
-        echo "<li>$error</li>";
-    }
-    echo '</ul>';
-    echo '</div>';
-}
-?>
-
 <?php include 'partials/_footer.php'; ?>
 <!-- scripts  -->
 <script src="js/navscroll.js"></script>

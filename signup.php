@@ -62,17 +62,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     if (!empty($errors)) {
-        // Display error messages to the user
-        // echo '<div id="error-messages">';
-        // echo '<div class="error-container">';
-        // echo '<h2>Error(s) occurred during sign-up:</h2>';
-        // echo '<ul class="error-list">';
-        // foreach ($errors as $error) {
-        //     echo "<li>$error</li>";
-        // }
-        // echo '</ul>';
-        // echo '</div>';
-        // echo '</div>';
+        
     } else {
         // Insert data into the database with default user type as "user"
         $hashedPassword = password_hash($Password, PASSWORD_DEFAULT);
@@ -124,9 +114,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <div class="create">
         <h1>CREATE &nbsp; ACCOUNT</h1>
         <div class="createUser">
-            <!-- <div class="userimg">
-                <img src="images/undraw_male_avatar_323b.svg" alt="user image">
-            </div> -->
+          
             <div class="userdata">
                 <!-- Create user Form -->
                 <form action="" method="post" onsubmit="return validate(this)">
@@ -216,7 +204,7 @@ if (!empty($errors)) {
 ?>
 
     <?php include 'partials/_footer.php'; ?>
-    <!-- scripts  -->
+    
     <script src="js/navscroll.js"></script>
 </body>
 
